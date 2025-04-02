@@ -1,0 +1,16 @@
+import pymel.core as pm
+"""Put a joint on each vertices of the selected mesh"""
+ 
+#Get name of mesh selected
+obj = pm.ls(selection=True)
+obj_name = str(obj[0])
+cv_list = pm.ls(obj_name+".vtx[*]", fl = True)
+ 
+ 
+for x in cv_list :
+    cls = pm.cluster(x) #cluster on vertex to get position
+    jnt = pm.joint() #create joint and parent on world
+    prnt = pm.parent(jnt,world = True)
+    point = pm.pointConstraint(cls,jnt,mo = 0) #parent the joint to the cluster with no offset
+    delt = pm.delete(point) #delete the constraint
+    delCls = pm.delete(cls) #delete the cluster
